@@ -1,9 +1,14 @@
 import React, { useState, useEffect, useContext } from 'react';
+import ErrorMessage from './ErrorMessage';
 import { UserContext } from '../context/UserContext';
-// import SpiderChart from './SpiderChart';
+import SpiderChart from './SpiderChart';
+import Table from './Table';
 
 const Profile = () => {
   const [token, ] = useContext(UserContext);
+  const [skills, setSkills] = useState(null);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [loaded, setLoaded] = useState(false);
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [position, setPosition] = useState("");
@@ -29,8 +34,29 @@ const Profile = () => {
     }
   }
 
+  const getSkills = async () => {
+    const requestOptions = {
+      method: 'GET',
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token
+      }
+    };
+
+    const response = await fetch("/api/skills", requestOptions);
+    
+    if(!response.ok) {
+      setErrorMessage("Something went wrong");
+    } else {
+      const data = await response.json();
+      setSkills(data);
+      setLoaded(true);
+    }
+  };
+
   useEffect(() => {
     profileUpdater();
+    getSkills();
   }, []);
 
   return (
@@ -62,7 +88,10 @@ const Profile = () => {
       <div className="column">
         <h1 className="title">Skills</h1>
         <div className="box">
-          {/* <SpiderChart /> */}
+          <SpiderChart skills_list={skills} />
+          <br />
+          {/* <Table func={getSkills} skills_list={skills} /> */}
+          <Table func={getSkills} skills_list={skills} loaded={loaded} />
         </div>
       </div>
     </div>

@@ -5,11 +5,11 @@ import { UserContext } from '../context/UserContext';
 import SkillModal from './SkillModal';
 
 // Component that will show the skills of the current user
-const Table = () => {
+const Table = ({ func, skills_list, loaded }) => {
   const [token, ] = useContext(UserContext);
-  const [skills, setSkills] = useState(null);
+  // const [skills, setSkills] = useState(null);
   const [errorMessage, setErrorMessage] = useState("");
-  const [loaded, setLoaded] = useState(false);
+  // const [loaded, setLoaded] = useState(false);
   const [activeModal, setActiveModal] = useState(false); // Holds whether or not the user will see the Modal
   const [id, setId] = useState(null); // Needed when updating the skills
 
@@ -33,37 +33,37 @@ const Table = () => {
       setErrorMessage("Failed to delete skill");
     }
 
-    getSkills();
+    await func();
   };
 
-  const getSkills = async () => {
-    const requestOptions = {
-      method: 'GET',
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + token
-      }
-    };
+  // const getSkills = async () => {
+  //   const requestOptions = {
+  //     method: 'GET',
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       Authorization: "Bearer " + token
+  //     }
+  //   };
 
-    const response = await fetch("/api/skills", requestOptions);
+  //   const response = await fetch("/api/skills", requestOptions);
     
-    if(!response.ok) {
-      setErrorMessage("Something went wrong");
-    } else {
-      const data = await response.json();
-      setSkills(data);
-      setLoaded(true);
-    }
-  };
+  //   if(!response.ok) {
+  //     setErrorMessage("Something went wrong");
+  //   } else {
+  //     const data = await response.json();
+  //     setSkills(data);
+  //     setLoaded(true);
+  //   }
+  // };
 
   // On page load get the user's skills
-  useEffect(() => {
-    getSkills();
-  });
+  // useEffect(() => {
+  //   func();
+  // }, []);
 
-  const handleModal = () => {
+  const handleModal = async () => {
     setActiveModal(!activeModal);
-    getSkills();
+    await func();
     setId(null);
   }
 
@@ -81,7 +81,7 @@ const Table = () => {
         Add Skill
       </button>
       <ErrorMessage message={errorMessage} />
-      {loaded && skills ?  (
+      {loaded && skills_list ?  (
         <table className="table is-fullwidth">
           <thead>
             <tr>
@@ -93,7 +93,7 @@ const Table = () => {
           </thead>
 
           <tbody>
-            {skills.map((skill) => (
+            {skills_list.map((skill) => (
               <tr key={skill.id}>
                 <td>{skill.skill_name}</td>
                 <td>{skill.skill_level}</td>
@@ -116,7 +116,7 @@ const Table = () => {
             ))}
           </tbody>
         </table>
-      ) : <p>Loading...</p>}
+      ) : <p>Loading... {console.log(loaded)}</p>}
     </>
   );
 }

@@ -3,7 +3,7 @@ import Register from './components/Register';
 import Header from './components/Header';
 import { UserContext } from './context/UserContext';
 import Login from './components/Login';
-import Table from './components/Table';
+// import Table from './components/Table';
 import Profile from './components/Profile';
 
 const App = () => {
@@ -51,8 +51,8 @@ const App = () => {
             ) : (
               <div>
                 <Profile />
-                <br />
-                <Table />
+                {/* <br /> */}
+                {/* <Table /> */}
               </div>
             )
           }
