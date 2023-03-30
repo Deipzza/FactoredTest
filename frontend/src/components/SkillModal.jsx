@@ -52,7 +52,8 @@ const SkillModal = ({active, handleModal, token, id, setErrorMessage}) => {
     if(!response.ok) {
       setErrorMessage("Something went wrong when creating the skill");
     } else {
-      cleanFormData();
+      cleanFormData(); // Clean the form data
+      handleModal(); // Close the modal window
     }
   }
 

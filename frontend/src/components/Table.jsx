@@ -1,15 +1,13 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import moment from "moment";
 import ErrorMessage from './ErrorMessage';
 import { UserContext } from '../context/UserContext';
 import SkillModal from './SkillModal';
 
 // Component that will show the skills of the current user
-const Table = ({ func, skills_list, loaded }) => {
+const Table = ({ skillsFunction, skillsList, loaded }) => {
   const [token, ] = useContext(UserContext);
-  // const [skills, setSkills] = useState(null);
   const [errorMessage, setErrorMessage] = useState("");
-  // const [loaded, setLoaded] = useState(false);
   const [activeModal, setActiveModal] = useState(false); // Holds whether or not the user will see the Modal
   const [id, setId] = useState(null); // Needed when updating the skills
 
@@ -33,37 +31,12 @@ const Table = ({ func, skills_list, loaded }) => {
       setErrorMessage("Failed to delete skill");
     }
 
-    await func();
+    await skillsFunction();
   };
-
-  // const getSkills = async () => {
-  //   const requestOptions = {
-  //     method: 'GET',
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       Authorization: "Bearer " + token
-  //     }
-  //   };
-
-  //   const response = await fetch("/api/skills", requestOptions);
-    
-  //   if(!response.ok) {
-  //     setErrorMessage("Something went wrong");
-  //   } else {
-  //     const data = await response.json();
-  //     setSkills(data);
-  //     setLoaded(true);
-  //   }
-  // };
-
-  // On page load get the user's skills
-  // useEffect(() => {
-  //   func();
-  // }, []);
 
   const handleModal = async () => {
     setActiveModal(!activeModal);
-    await func();
+    await skillsFunction();
     setId(null);
   }
 
@@ -81,7 +54,7 @@ const Table = ({ func, skills_list, loaded }) => {
         Add Skill
       </button>
       <ErrorMessage message={errorMessage} />
-      {loaded && skills_list ?  (
+      {loaded && skillsList ?  (
         <table className="table is-fullwidth">
           <thead>
             <tr>
@@ -93,7 +66,7 @@ const Table = ({ func, skills_list, loaded }) => {
           </thead>
 
           <tbody>
-            {skills_list.map((skill) => (
+            {skillsList.map((skill) => (
               <tr key={skill.id}>
                 <td>{skill.skill_name}</td>
                 <td>{skill.skill_level}</td>
@@ -116,7 +89,7 @@ const Table = ({ func, skills_list, loaded }) => {
             ))}
           </tbody>
         </table>
-      ) : <p>Loading... {console.log(loaded)}</p>}
+      ) : <p>Loading...</p>}
     </>
   );
 }

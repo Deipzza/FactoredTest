@@ -7,7 +7,7 @@ import Table from './Table';
 const Profile = () => {
   const [token, ] = useContext(UserContext);
   const [skills, setSkills] = useState(null);
-  const [errorMessage, setErrorMessage] = useState("");
+  const [, setErrorMessage] = useState("");
   const [loaded, setLoaded] = useState(false);
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
@@ -72,14 +72,14 @@ const Profile = () => {
                 alt="avatar"
               />
             </figure>
-
+            
             <h2 className="title">{name}</h2>
           </div>
 
           <div>
             <ul className="mt-6 is-size-4 has-text-centered">
-              <li>Email: {email}</li>
-              <li>Company position: {position}</li>
+              <li><b>Email:</b> {email}</li>
+              <li><b>Company position:</b> {position}</li>
             </ul>
           </div>
         </div>
@@ -88,10 +88,9 @@ const Profile = () => {
       <div className="column">
         <h1 className="title">Skills</h1>
         <div className="box">
-          <SpiderChart skills_list={skills} />
+          <SpiderChart skillsList={skills} />
           <br />
-          {/* <Table func={getSkills} skills_list={skills} /> */}
-          <Table func={getSkills} skills_list={skills} loaded={loaded} />
+          <Table skillsFunction={getSkills} skillsList={skills} loaded={loaded} />
         </div>
       </div>
     </div>

@@ -3,7 +3,6 @@ import Register from './components/Register';
 import Header from './components/Header';
 import { UserContext } from './context/UserContext';
 import Login from './components/Login';
-// import Table from './components/Table';
 import Profile from './components/Profile';
 
 const App = () => {
@@ -39,7 +38,7 @@ const App = () => {
 
   return (
     <>
-      <Header title={ message }/>
+      <Header title={message}/>
       <div className="columns">
         <div className="column"></div>
         <div className="column m-5 is-two-thirds">
@@ -51,8 +50,6 @@ const App = () => {
             ) : (
               <div>
                 <Profile />
-                {/* <br /> */}
-                {/* <Table /> */}
               </div>
             )
           }
