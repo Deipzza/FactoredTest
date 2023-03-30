@@ -16,7 +16,7 @@ jwt_secret = _os.environ.get("JWT_SECRET")
 oauth2schema = _security.OAuth2PasswordBearer(tokenUrl="/api/token")
 
 def create_database():
-    return _database.Base.metadata.create_all(bind=_database.engine)
+    return _database.Base.metadata.create_all(bind = _database.engine)
 
 def get_db():
     db = _database.SessionLocal()
@@ -32,8 +32,10 @@ async def get_user_by_email(email: str, db: _orm.Session):
 
 async def create_user(user: _schemas.UserCreate, db: _orm.Session):
     user_obj = _models.User(
-        email=user.email, 
-        hashed_password=_hash.bcrypt.hash(user.hashed_password)
+        email = user.email,
+        name = user.name,
+        position = user.position,
+        hashed_password = _hash.bcrypt.hash(user.hashed_password)
     )
     
     # Add the user to the database
@@ -70,76 +72,73 @@ async def get_current_user(
     token: str = _fastapi.Depends(oauth2schema)
 ):
     try:
-        payload = _jwt.decode(token, jwt_secret, algorithms=["HS256"])
+        payload = _jwt.decode(token, jwt_secret, algorithms = ["HS256"])
         user = db.query(_models.User).get(payload["id"])
     except:
         raise _fastapi.HTTPException(
-            status_code=401,
-            detail="Invalid email or password"
+            status_code = 401,
+            detail = "Invalid email or password"
         )
 
     return _schemas.User.from_orm(user)
 
-# Create a new lead
-async def create_lead(
+# Create a new skill
+async def create_skill(
     user: _schemas.User,
     db: _orm.Session,
-    lead: _schemas.LeadCreate
+    skill: _schemas.SkillCreate
 ):
-    lead = _models.Lead(**lead.dict(), owner_id=user.id)
-    db.add(lead)
+    skill = _models.Skill(**skill.dict(), owner_id = user.id)
+    db.add(skill)
     db.commit()
-    db.refresh(lead)
+    db.refresh(skill)
 
-    return _schemas.Lead.from_orm(lead)
+    return _schemas.Skill.from_orm(skill)
 
-# Return a list of all the leads created by the given user
-async def get_leads(user: _schemas.User, db: _orm.Session):
-    leads = db.query(_models.Lead).filter_by(owner_id=user.id)
+# Return a list of all the skills of the given user
+async def get_skills(user: _schemas.User, db: _orm.Session):
+    skills = db.query(_models.Skill).filter_by(owner_id = user.id)
 
-    return list(map(_schemas.Lead.from_orm, leads))
+    return list(map(_schemas.Skill.from_orm, skills))
 
-async def _lead_selector(lead_id: int, user: _schemas.User, db: _orm.Session):
-    lead = (
-        db.query(_models.Lead)  # Queries the Lead table
+async def _skill_selector(skill_id: int, user: _schemas.User, db: _orm.Session):
+    skill = (
+        db.query(_models.Skill)  # Queries the Skill table
         .filter_by(owner_id = user.id)  # Filters by the owner that created it
-        .filter(_models.Lead.id == lead_id)  # Find the id that matches the param
+        .filter(_models.Skill.id == skill_id)  # Find the id that matches the param
         .first()  # Return the first object that matches
     )
 
-    if lead is None:
+    if skill is None:
         raise _fastapi.HTTPException(
             status_code = 404,
-            detail = "Lead does not exist"
+            detail = "Skill does not exist"
         )
 
-    return lead
+    return skill
 
-# Return a specific lead
-async def get_lead(lead_id: int, user: _schemas.User, db: _orm.Session):
-    lead = await _lead_selector(lead_id = lead_id, user = user, db = db)
+# Return a specific skill
+async def get_skill(skill_id: int, user: _schemas.User, db: _orm.Session):
+    skill = await _skill_selector(skill_id = skill_id, user = user, db = db)
 
-    return _schemas.Lead.from_orm(lead)
+    return _schemas.Skill.from_orm(skill)
 
-async def delete_lead(lead_id: int, user: _schemas.User, db: _orm.Session):
-    lead = await _lead_selector(lead_id = lead_id, user = user, db = db)
-    db.delete(lead)
+async def delete_skill(skill_id: int, user: _schemas.User, db: _orm.Session):
+    skill = await _skill_selector(skill_id = skill_id, user = user, db = db)
+    db.delete(skill)
     db.commit()
 
-async def update_lead(
-    lead_id: int,
-    lead: _schemas.LeadCreate,
+async def update_skill(
+    skill_id: int,
+    skill: _schemas.SkillCreate,
     user: _schemas.User,
     db: _orm.Session
 ):
-    lead_db = await _lead_selector(lead_id = lead_id, user = user, db = db)
-    lead_db.first_name = lead.first_name
-    lead_db.last_name = lead.last_name
-    lead_db.email = lead.email
-    lead_db.company = lead.company
-    lead_db.note = lead.note
-    lead_db.date_last_updated = _dt.datetime.utcnow()
+    skill_db = await _skill_selector(skill_id = skill_id, user = user, db = db)
+    skill_db.skill_name = skill.skill_name
+    skill_db.skill_level = skill.skill_level
+    skill_db.date_last_updated = _dt.datetime.utcnow()
     db.commit()
-    db.refresh(lead_db)
+    db.refresh(skill_db)
 
-    return _schemas.Lead.from_orm(lead_db)
+    return _schemas.Skill.from_orm(skill_db)

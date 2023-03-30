@@ -3,6 +3,8 @@ import pydantic as _pydantic
 
 class _UserBase(_pydantic.BaseModel):
     email: str
+    name: str
+    position: str
 
 
 class UserCreate(_UserBase):
@@ -19,19 +21,16 @@ class User(_UserBase):
         orm_mode = True
 
 
-class _LeadBase(_pydantic.BaseModel):
-    first_name: str
-    last_name: str
-    email: str
-    company: str
-    note: str
+class _SkillBase(_pydantic.BaseModel):
+    skill_name: str
+    skill_level: int
 
 
-class LeadCreate(_LeadBase):
+class SkillCreate(_SkillBase):
     pass
 
 
-class Lead(_LeadBase):
+class Skill(_SkillBase):
     id: int
     owner_id = int
     date_created = _dt.datetime
