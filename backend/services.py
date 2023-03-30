@@ -6,6 +6,7 @@ import sqlalchemy.orm as _orm
 import models as _models
 import schemas as _schemas
 import passlib.hash as _hash
+import datetime as _dt
 import os as _os
 from dotenv import load_dotenv
 
@@ -52,9 +53,9 @@ async def authenticate_user(email: str, password: str, db: _orm.Session):
     
     return user
 
-# Create a token
+# Create a new token
 async def create_token(user: _models.User):
-    # Takes the module, maps it to the User schema
+    # Takes the module and maps it to the User schema
     user_obj = _schemas.User.from_orm(user)
 
     # Get JWT token from .env file
@@ -63,6 +64,7 @@ async def create_token(user: _models.User):
 
     return dict(access_token=token, token_type="bearer")
 
+# Return the current authenticated user
 async def get_current_user(
     db: _orm.Session = _fastapi.Depends(get_db),
     token: str = _fastapi.Depends(oauth2schema)
@@ -78,7 +80,12 @@ async def get_current_user(
 
     return _schemas.User.from_orm(user)
 
-async def create_lead(user: _schemas.User, db: _orm.Session, lead: _schemas.LeadCreate):
+# Create a new lead
+async def create_lead(
+    user: _schemas.User,
+    db: _orm.Session,
+    lead: _schemas.LeadCreate
+):
     lead = _models.Lead(**lead.dict(), owner_id=user.id)
     db.add(lead)
     db.commit()
@@ -86,7 +93,53 @@ async def create_lead(user: _schemas.User, db: _orm.Session, lead: _schemas.Lead
 
     return _schemas.Lead.from_orm(lead)
 
+# Return a list of all the leads created by the given user
 async def get_leads(user: _schemas.User, db: _orm.Session):
     leads = db.query(_models.Lead).filter_by(owner_id=user.id)
 
     return list(map(_schemas.Lead.from_orm, leads))
+
+async def _lead_selector(lead_id: int, user: _schemas.User, db: _orm.Session):
+    lead = (
+        db.query(_models.Lead)  # Queries the Lead table
+        .filter_by(owner_id = user.id)  # Filters by the owner that created it
+        .filter(_models.Lead.id == lead_id)  # Find the id that matches the param
+        .first()  # Return the first object that matches
+    )
+
+    if lead is None:
+        raise _fastapi.HTTPException(
+            status_code = 404,
+            detail = "Lead does not exist"
+        )
+
+    return lead
+
+# Return a specific lead
+async def get_lead(lead_id: int, user: _schemas.User, db: _orm.Session):
+    lead = await _lead_selector(lead_id = lead_id, user = user, db = db)
+
+    return _schemas.Lead.from_orm(lead)
+
+async def delete_lead(lead_id: int, user: _schemas.User, db: _orm.Session):
+    lead = await _lead_selector(lead_id = lead_id, user = user, db = db)
+    db.delete(lead)
+    db.commit()
+
+async def update_lead(
+    lead_id: int,
+    lead: _schemas.LeadCreate,
+    user: _schemas.User,
+    db: _orm.Session
+):
+    lead_db = await _lead_selector(lead_id = lead_id, user = user, db = db)
+    lead_db.first_name = lead.first_name
+    lead_db.last_name = lead.last_name
+    lead_db.email = lead.email
+    lead_db.company = lead.company
+    lead_db.note = lead.note
+    lead_db.date_last_updated = _dt.datetime.utcnow()
+    db.commit()
+    db.refresh(lead_db)
+
+    return _schemas.Lead.from_orm(lead_db)
