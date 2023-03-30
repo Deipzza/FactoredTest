@@ -2,7 +2,7 @@ import React, { useState, useContext } from 'react';
 import { UserContext } from '../context/UserContext';
 import ErrorMessage from './ErrorMessage';
 
-const Register = () => {
+const Register = (props) => {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [position, setPosition] = useState("");
@@ -118,9 +118,20 @@ const Register = () => {
 
         <br />
 
-        <button className="button is-primary" type="submit">
-          Register
-        </button>
+        <div className="columns ">
+          <div className="column m-5 ml-6 is-half">
+            <button className="button ml-6 is-primary" type="submit">
+              Register
+            </button>
+          </div>
+          <div className="column m-5 is-half">
+            <button
+              className="button mr-6 is-primary is-light"
+              onClick={() => props.onForm('login')}>
+              Login
+            </button>
+          </div>
+        </div>
       </form>
     </div>
   );

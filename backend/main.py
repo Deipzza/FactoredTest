@@ -102,4 +102,4 @@ async def update_skill(
 
 @app.get("/api")
 async def root():
-    return {"message": "Awesome skills manager!"}
+    return {"message": "Company's employer management system"}

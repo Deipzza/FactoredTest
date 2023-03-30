@@ -5,7 +5,7 @@ export const UserContext = createContext();
 export const UserProvider = (props) => {
   const [token, setToken] = useState(localStorage.getItem('skillsToken'));
 
-  useEffect(() =>{
+  useEffect(() => {
     const fetchUser = async () => {
       const requestOptions = {
         method: "GET",

@@ -4,10 +4,12 @@ import Header from './components/Header';
 import { UserContext } from './context/UserContext';
 import Login from './components/Login';
 import Table from './components/Table';
+import Profile from './components/Profile';
 
 const App = () => {
   const [message, setMessage] = useState("");
   const [token, ] = useContext(UserContext);
+  const [form, setForm] = useState("login");
 
   const getWelcomeMessage = async () => {
     const requestOptions = {
@@ -27,6 +29,10 @@ const App = () => {
     }
   };
 
+  const changeForm = (formName) => {
+    setForm(formName);
+  }
+
   useEffect(() => {
     getWelcomeMessage();
   }, []);
@@ -40,11 +46,14 @@ const App = () => {
           {
             !token ? (
               <div className="columns">
-                <Register />
-                <Login />
+                {form === "login" ? <Login onForm={changeForm} /> : <Register onForm={changeForm} />}
               </div>
             ) : (
-              <Table />
+              <div>
+                <Profile />
+                <br />
+                <Table />
+              </div>
             )
           }
         </div>

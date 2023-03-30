@@ -2,7 +2,7 @@ import React, { useState, useContext } from 'react';
 import ErrorMessage from './ErrorMessage';
 import { UserContext } from '../context/UserContext';
 
-const Login = () => {
+const Login = (props) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -64,10 +64,20 @@ const Login = () => {
         <ErrorMessage message={errorMessage}/>
 
         <br />
-
-        <button className="button is-primary" type="submit">
-          Login
-        </button>
+        <div className="columns ">
+          <div className="column m-5 ml-6 is-half">
+            <button className="button ml-6 is-primary" type="submit">
+              Login
+            </button>
+          </div>
+          <div className="column m-5 is-half">
+            <button
+              className="button mr-6 is-primary is-light"
+              onClick={() => props.onForm('register')}>
+              Register
+            </button>
+          </div>
+        </div>
       </form>
     </div>
   );
