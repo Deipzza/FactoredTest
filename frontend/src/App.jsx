@@ -1,14 +1,17 @@
 import React, { useState, useEffect, useContext } from 'react';
-import Register from './components/Register';
+// import Register from './components/Register';
 import Header from './components/Header';
-import { UserContext } from './context/UserContext';
-import Login from './components/Login';
-import Profile from './components/Profile';
+// import { UserContext } from './context/UserContext';
+// import Login from './components/Login';
+// import Profile from './components/Profile';
+import { Route, Routes } from 'react-router-dom';
+import RootPage from './pages/RootPage';
+import PageNotFound from './pages/PageNotFound';
 
 const App = () => {
   const [message, setMessage] = useState("");
-  const [token, ] = useContext(UserContext);
-  const [form, setForm] = useState("login");
+  // const [token, ] = useContext(UserContext);
+  // const [form, setForm] = useState("login");
 
   const getWelcomeMessage = async () => {
     const requestOptions = {
@@ -28,9 +31,9 @@ const App = () => {
     }
   };
 
-  const changeForm = (formName) => {
-    setForm(formName);
-  }
+  // const changeForm = (formName) => {
+  //   setForm(formName);
+  // }
 
   useEffect(() => {
     getWelcomeMessage();
@@ -39,23 +42,12 @@ const App = () => {
   return (
     <>
       <Header title={message}/>
-      <div className="columns">
-        <div className="column"></div>
-        <div className="column m-5 is-two-thirds">
-          {
-            !token ? (
-              <div className="columns">
-                {form === "login" ? <Login onForm={changeForm} /> : <Register onForm={changeForm} />}
-              </div>
-            ) : (
-              <div>
-                <Profile />
-              </div>
-            )
-          }
-        </div>
-        <div className="column"></div>
-      </div>
+      
+
+      <Routes>
+        <Route path='/' element={<RootPage />}/>
+        <Route path='*' element={<PageNotFound />}/>
+      </Routes>
     </>
   );
 }
