@@ -23,6 +23,8 @@ Other libraries used are:
 ## How to run this project.
 In order to use this project, you must follow these steps:
 
+**Note:** These steps are only for Windows users.
+
 1. **Download Docker:** Go to [the installation page of Docker](https://docs.docker.com/desktop/install/windows-install/) and download and install Docker on your computer.
 
 2. **Download or clone the repository:** In the main page of the repository, click on the `<>Code` green button and either select a clone method or download the ZIP file to your computer.
@@ -35,5 +37,6 @@ In order to use this project, you must follow these steps:
 
 6. **Main functionalities:**  This application allows you to register and login with employee accounts and manage the stored skills they have. Once you create an account (register), you can login wit this account and manage your skills: creating, updating or deleting them. Also, these are displayed in a Spider type chart on your profile.
 
-
-**Note:** These steps are only for Windows users.
+7. **Dummy user:** The program has a dummy account that you can use to login immediately after installation. It's credentials are:
+    * **email:** `david@mail.com`
+    * **password:** `mypassword`
