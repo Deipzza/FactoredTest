@@ -25,7 +25,7 @@ In order to use this project, you must have these configurations before-hand:
 
 **Note:** These steps are only for Windows users.
 
-1. **Download and install WinRAR:** Go to the (WinRAR downloads page)[https://www.win-rar.com/download.html?&L=0] and download the one that matches the configuration of your computer. Once downloaded, click on the `.exe` file you just downloaded and execute it in order to install WinRAR.
+1. **Download and install WinRAR:** Go to the [WinRAR downloads page](https://www.win-rar.com/download.html?&L=0) and download the one that matches the configuration of your computer. Once downloaded, click on the `.exe` file you just downloaded and execute it in order to install WinRAR.
 
 2. **Download and install Docker:** Go to the [Docker downloads page](https://docs.docker.com/desktop/install/windows-install/) and download Docker on your computer. Once it's downloaded, execute this file you just downloaded to install Docker.
 
