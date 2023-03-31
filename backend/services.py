@@ -7,13 +7,12 @@ import models as _models
 import schemas as _schemas
 import passlib.hash as _hash
 import datetime as _dt
-import os as _os
-from dotenv import load_dotenv
+# import os as _os
+# from dotenv import load_dotenv
 
-BASE_DIR = _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__)))
-load_dotenv(_os.path.join(BASE_DIR, 'backend/.env'))
-jwt_secret = _os.environ.get("JWT_SECRET")
-oauth2schema = _security.OAuth2PasswordBearer(tokenUrl="/api/token")
+JWT_SECRET = "myjwtsecret"
+
+oauth2schema = _security.OAuth2PasswordBearer(tokenUrl = "/api/token")
 
 def create_database():
     return _database.Base.metadata.create_all(bind = _database.engine)
@@ -59,10 +58,8 @@ async def authenticate_user(email: str, password: str, db: _orm.Session):
 async def create_token(user: _models.User):
     # Takes the module and maps it to the User schema
     user_obj = _schemas.User.from_orm(user)
-
-    # Get JWT token from .env file
     
-    token = _jwt.encode(user_obj.dict(), jwt_secret)
+    token = _jwt.encode(user_obj.dict(), JWT_SECRET)
 
     return dict(access_token=token, token_type="bearer")
 
@@ -72,7 +69,7 @@ async def get_current_user(
     token: str = _fastapi.Depends(oauth2schema)
 ):
     try:
-        payload = _jwt.decode(token, jwt_secret, algorithms = ["HS256"])
+        payload = _jwt.decode(token, JWT_SECRET, algorithms = ["HS256"])
         user = db.query(_models.User).get(payload["id"])
     except:
         raise _fastapi.HTTPException(
