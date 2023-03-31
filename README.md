@@ -20,23 +20,30 @@ Other libraries used are:
 ---
 <br>
 
-## How to run this project.
-In order to use this project, you must follow these steps:
+## Prerequisites.
+In order to use this project, you must have these configurations before-hand:
 
 **Note:** These steps are only for Windows users.
 
-1. **Download Docker:** Go to [the installation page of Docker](https://docs.docker.com/desktop/install/windows-install/) and download and install Docker on your computer.
+1. **Download and install WinRAR:** Go to the (WinRAR downloads page)[https://www.win-rar.com/download.html?&L=0] and download the one that matches the configuration of your computer. Once downloaded, click on the `.exe` file you just downloaded and execute it in order to install WinRAR.
 
-2. **Download or clone the repository:** In the main page of the repository, click on the `<>Code` green button and either select a clone method or download the ZIP file to your computer.
+2. **Download and install Docker:** Go to the [Docker downloads page](https://docs.docker.com/desktop/install/windows-install/) and download Docker on your computer. Once it's downloaded, execute this file you just downloaded to install Docker.
 
-3. **Open a Command Prompt or Terminal:** Go to the project's folder (the one that you just downloaded) on your computer and open it. Inside it right-click and select "Open in Terminal".
+2. **Download or clone this project's repository:** In the main page of this repository, click on the `<>Code` green button and either select a clone method or download the ZIP file to your computer. Be sure to put it in an easy-accessible folder.
 
-4. **Run Docker command:** In the terminal, run the command `docker compose up`. This will mount the containers and images required for the project to work properly.
+<br>
 
-5. **Use the app:** Once the installation and configuration of the project containers (from the last command) are complete, open a browser and write http://localhost:3000/. This will open the main page of the application.
+## How to run this project?
+Once you have done the previous steps, now you can execute the project:
 
-6. **Main functionalities:**  This application allows you to register and login with employee accounts and manage the stored skills they have. Once you create an account (register), you can login wit this account and manage your skills: creating, updating or deleting them. Also, these are displayed in a Spider type chart on your profile.
+1. **Open a Command Prompt or Terminal:** Go to the project's folder (the one that you just downloaded) on your computer and open it. If you downloaded the ZIP file, first you have to unzip it, that is, right-click on the file and select "Extract here" on the WinRAR context menu. Inside the folder, right-click and in the context menu select "Open in Terminal".
 
-7. **Dummy user:** The program has a dummy account that you can use to login immediately after installation. It's credentials are:
+2. **Run Docker command:** In the terminal, run the command `docker compose up`. This will mount the containers and images required for the project to work properly. Be patient, this can take some time.
+
+3. **Use the app:** Once the installation and configuration of the project containers (from the last command) are complete, open a browser and write http://localhost:3000/. This will open the main page of the application.
+
+4. **Main functionalities:**  This application allows you to register and login with employee accounts and manage the stored skills they have. Once you create an account (register), you can login with this account and manage your skills: creating, updating or deleting them. Also, these are displayed in a Spider type chart on your profile.
+
+5. **Dummy user:** The program has a dummy account that you can use to login immediately after installation. Its credentials are:
     * **email:** `david@mail.com`
     * **password:** `mypassword`
